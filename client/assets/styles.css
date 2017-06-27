@@ -37,3 +37,7 @@ nav {
 .folders:hover {
   color: #B4869F;
 }
+
+#folder-input-popup {
+  display: none;
+}
