@@ -4,7 +4,9 @@ window.onload = () => {
   .then(response => {
     folderArr = []
     response.forEach(folder => {
-      folderArr.push(folder)
+      if(folder.name) {
+        folderArr.push(folder)
+      }
     })
     alphabetize(folderArr).forEach(folder => printToPage(folder))
   })
@@ -30,18 +32,42 @@ const printToPage = (folder) => {
 }
 
 
+const createFolder = () => {
+  const makeFolderPopup = document.getElementById('folder-input-popup')
+  makeFolderPopup.style.display = 'block'
 
-// const submitFolder = () => {
-//   const folderName = document.getElementById('folder-name').value
-//   fetch('/api/v1/folders', {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json'},
-//     body: JSON.stringify({'name': folderName})
-//   })
-//   .then(res => res.json())
-//   .then(data => console.log(data))
-//   .catch(error => console.log(error))
-// }
+}
+
+const submitFolder = () => {
+  const newFolderName = document.getElementById('new-folder-name').value
+  const newUrl = document.getElementById('new-url')
+  const newUrlDescription = document.getElementById('new-url-description')
+
+  fetch('/api/v1/folders', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({'name': newFolderName})
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(error => console.log(error))
+  
+  const makeFolderPopup = document.getElementById('folder-input-popup')
+  makeFolderPopup.style.display = 'none'
+}
+
+let createFolderButton = document.getElementById('create-folder-btn')
+createFolderButton.addEventListener('click', createFolder)
+
+
+let folderSubmit = document.getElementById('folder-submit')
+folderSubmit.addEventListener('click', submitFolder)
+
+
+
+// const folderName = document.getElementById('folder-name').value
+
+
 //
 // let createFolderButton = document.getElementById('create-folder')
 // createFolderButton.addEventListener('click', submitFolder)
