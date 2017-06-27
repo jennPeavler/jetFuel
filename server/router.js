@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const api = require('./api')
 
-router.get('/', api.hello)
+router.get('/folders', api.folders)
+router.post('/folders', api.newFolder)
 
 module.exports = router;
