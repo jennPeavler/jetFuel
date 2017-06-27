@@ -1,3 +1,39 @@
 body {
   background: #333333;
+  color: #F6ECCC;
+}
+
+#search-bar {
+  width: 40%;
+  background: #333333;
+  border: none;
+  border-bottom: 3px solid #B4869F;
+}
+
+#create-folder-btn {
+  width: 25%;
+  background: #B4869F;
+  border: none;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5%;
+}
+
+#folder-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 5%;
+}
+
+.folders {
+  padding: 2%;
+  cursor: pointer;
+}
+
+.folders:hover {
+  color: #B4869F;
 }
