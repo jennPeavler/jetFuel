@@ -91,7 +91,7 @@ nav {
   color: #F6ECCC;
   border: none;
   border-radius: 4px;
-  padding: 1%;
+  padding: 1% 2%;
   margin-top: 2%;
   outline: none;
   font-family: 'Arimo', sans-serif;
@@ -103,6 +103,12 @@ nav {
   font-weight: bold;
   font-size: 1.2em;
 }
+
+input {
+  color: #333333;
+  outline: none;
+}
+
 
 @media (max-width: 640px) {
   .folders {
