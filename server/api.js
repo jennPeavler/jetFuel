@@ -17,11 +17,12 @@ const newFolder = (req, res) => {
   const { name, url, description } = req.body
   database('folders').insert({name: name}, 'id')
   .then(folder => {
+    console.log(folder);
     database('urls').insert({url: url,
                             description: description,
                             folder_id: folder[0]}, 'id')
     .then(url => {
-      res.status(201).json({urlID: url[0], folderID: folder[0]})
+      res.status(201).json(req.body)
     })
   })
 
