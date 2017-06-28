@@ -7,14 +7,15 @@
   </head>
   <body>
     <nav>
-      <input id='search-bar' placeholder='search folders' type='text'>
+      <input id='search-bar' placeholder='Search Folders' type='text'>
       <button id='create-folder-btn'>Create New Folder</button>
     </nav>
     <section id='folder-input-popup'>
-      <input id='new-folder-name' type='text' placeholder="folder name"/>
-      <input id='new-url' type='text' placeholder="url"/>
-      <input id='new-url-description' type='text' placeholder="url description"/>
-      <button id='folder-submit'>Submit</button>
+      <input class='folder-input' id='new-folder-name' type='text' placeholder="folder name*"/>
+      <input class='folder-input' id='new-url' type='text' placeholder="url"/>
+      <input class='folder-input' id='new-url-description' type='text' placeholder="url description"/>
+      <button id='folder-submit-btn'>Submit New Folder</button>
+      <p id='required'>*Required</p>
     </section>
     <section id='folder-display'></section>
 
