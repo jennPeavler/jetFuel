@@ -1,8 +1,9 @@
+let folderArr = []
+
 window.onload = () => {
   fetch('http://localhost:3000/api/v1/folders')
   .then(res => res.json())
   .then(response => {
-    folderArr = []
     response.forEach(folder => {
       if(folder.name) {
         folderArr.push(folder)
@@ -24,7 +25,7 @@ const printToPage = (folder) => {
   newFolder.append(folder.name)
 
   let clickFolder = () => {
-    console.log(folder.name)
+    console.log(folder)
   }
 
   newFolder.addEventListener('click', clickFolder)
@@ -53,7 +54,9 @@ const submitFolder = () => {
     })
   })
   .then(res => res.json())
-  .then(data => console.log(data))
+  .then(data => {
+    printToPage(data)
+  })
   .catch(error => console.log(error))
 
   const makeFolderPopup = document.getElementById('folder-input-popup')
