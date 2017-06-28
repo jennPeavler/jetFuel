@@ -14,15 +14,18 @@ const folders = (req, res) => {
 }
 
 const newFolder = (req, res) => {
-  console.log(req.body.name)
-  const folderName = req.body
-  database('folders').insert(folderName, 'id')
+  const { name, url, description } = req.body
+  database('folders').insert({name: name}, 'id')
   .then(folder => {
-    res.status(201).json({id: folder[0]})
+    database('urls').insert({url: url,
+                            description: description,
+                            folder_id: folder[0]}, 'id')
+    .then(url => {
+      res.status(201).json({urlID: url[0], folderID: folder[0]})
+    })
   })
-  .catch(error => {
-    res.status(500).json({message: error})
-  })
+
+  .catch(error => res.status(500).json({error}))
 }
 
 

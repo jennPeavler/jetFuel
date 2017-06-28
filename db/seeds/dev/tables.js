@@ -8,9 +8,9 @@ exports.seed = function(knex, Promise) {
         }, 'id')
         .then(folder => {
           return knex('urls').insert([
-            { url: 'google.com', description: 'search engine', shortUrl: 'jetfuel/gman', popularity: 1, folder_id: folder[0]},
-            { url: 'pinball.com', description: 'pinball', shortUrl: 'jetfuel/pinball', popularity: 100, folder_id: folder[0]},
-            { url: 'kinggeorge.com', description: 'george', shortUrl: 'jetfuel/george', popularity: 10, folder_id: folder[0]}
+            { url: 'google.com', description: 'search engine', popularity: 1, folder_id: folder[0]},
+            { url: 'pinball.com', description: 'pinball', popularity: 100, folder_id: folder[0]},
+            { url: 'kinggeorge.com', description: 'george', popularity: 10, folder_id: folder[0]}
           ]
           )
         })

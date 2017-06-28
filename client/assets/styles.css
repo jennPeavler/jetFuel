@@ -58,7 +58,7 @@ nav {
 
 #folder-input-popup {
   display: none;
-  background: rgba(58,130,115, 0.95);
+  background: rgba(58,130,115, 1);
   width: 40%;
   margin: 5% 30%;
   /*display: flex;*/

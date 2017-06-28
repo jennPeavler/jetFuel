@@ -40,13 +40,17 @@ const createFolder = () => {
 
 const submitFolder = () => {
   const newFolderName = document.getElementById('new-folder-name').value
-  const newUrl = document.getElementById('new-url')
-  const newUrlDescription = document.getElementById('new-url-description')
+  const newUrl = document.getElementById('new-url').value
+  const newUrlDescription = document.getElementById('new-url-description').value
 
   fetch('/api/v1/folders', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({'name': newFolderName})
+    body: JSON.stringify({
+      'name': newFolderName,
+      'url': newUrl,
+      'description': newUrlDescription
+    })
   })
   .then(res => res.json())
   .then(data => console.log(data))
