@@ -34,7 +34,7 @@ const printToPage = (folder) => {
 
 const createFolder = () => {
   const makeFolderPopup = document.getElementById('folder-input-popup')
-  makeFolderPopup.style.display = 'block'
+  makeFolderPopup.style.display = 'flex'
 
 }
 
@@ -51,7 +51,7 @@ const submitFolder = () => {
   .then(res => res.json())
   .then(data => console.log(data))
   .catch(error => console.log(error))
-  
+
   const makeFolderPopup = document.getElementById('folder-input-popup')
   makeFolderPopup.style.display = 'none'
 }
@@ -60,8 +60,8 @@ let createFolderButton = document.getElementById('create-folder-btn')
 createFolderButton.addEventListener('click', createFolder)
 
 
-let folderSubmit = document.getElementById('folder-submit')
-folderSubmit.addEventListener('click', submitFolder)
+let folderSubmitButton = document.getElementById('folder-submit-btn')
+folderSubmitButton.addEventListener('click', submitFolder)
 
 
 

@@ -1,19 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo');
+
 body {
   background: #333333;
   color: #F6ECCC;
+  font-family: 'Arimo', sans-serif;
+  font-size: 1.2em;
 }
 
 #search-bar {
   width: 40%;
   background: #333333;
   border: none;
-  border-bottom: 3px solid #B4869F;
+  border-bottom: 3px solid #3A8273;
+  font-family: 'Arimo', sans-serif;
+}
+
+#search-bar::placeholder {
+  color: #F6ECCC;
+  font-size: 1.6em;
+  font-family: 'Arimo', sans-serif;
 }
 
 #create-folder-btn {
   width: 25%;
-  background: #B4869F;
+  background: #3A8273;
   border: none;
+  border-radius: 5px;
+  outline: none;
+  color: #F6ECCC;
+  font-size: 1em;
+  font-family: 'Arimo', sans-serif;
 }
 
 nav {
@@ -32,12 +48,72 @@ nav {
 .folders {
   padding: 2%;
   cursor: pointer;
+  width: 20%;
+  text-align: center;
 }
 
 .folders:hover {
-  color: #B4869F;
+  color: #3A8273;
 }
 
 #folder-input-popup {
   display: none;
+  background: rgba(58,130,115, 0.95);
+  width: 40%;
+  margin: 5% 30%;
+  /*display: flex;*/
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.folder-input {
+  width: 50%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #333333;
+  margin-bottom: 2%;
+  font-size: 1.2em;
+  font-weight: bold;
+  font-family: 'Arimo', sans-serif;
+}
+
+.folder-input::placeholder {
+  color: #333333;
+  font-family: 'Arimo', sans-serif;
+}
+
+#folder-submit-btn {
+  background: #333333;
+  color: #F6ECCC;
+  border: none;
+  border-radius: 4px;
+  padding: 1%;
+  margin-top: 2%;
+  outline: none;
+  font-family: 'Arimo', sans-serif;
+  font-size: 1.2em;
+}
+
+#required {
+  color: #333333;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+@media (max-width: 640px) {
+  .folders {
+    width: 25%;
+    padding: 3%;
+  }
+}
+
+@media (max-width: 500px) {
+  .folders {
+    width: 40%;
+    padding: 5%;
+  }
 }
