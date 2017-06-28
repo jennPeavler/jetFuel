@@ -1,8 +1,9 @@
+let folderArr = []
+
 window.onload = () => {
   fetch('http://localhost:3000/api/v1/folders')
   .then(res => res.json())
   .then(response => {
-    folderArr = []
     response.forEach(folder => {
       if(folder.name) {
         folderArr.push(folder)

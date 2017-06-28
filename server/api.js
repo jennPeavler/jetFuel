@@ -29,8 +29,27 @@ const newFolder = (req, res) => {
   .catch(error => res.status(500).json({error}))
 }
 
+const retrieveFolderUrls = (req, res) => {
+  const { id } = req.params
+  console.log(id);
+  database('urls').where('folder_id', id).select()
+  .then(urls => {
+      if (urls.length) {
+        res.status(200).json(urls);
+      } else {
+        res.status(404).json({
+          error: `Could not find urls with folder id ${id}`
+        });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    })
+}
+
 
 module.exports = {
   folders: folders,
-  newFolder: newFolder
+  newFolder: newFolder,
+  retrieveFolderUrls: retrieveFolderUrls
 }
