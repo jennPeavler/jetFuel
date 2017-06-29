@@ -29,27 +29,21 @@ window.onload = () => {
 
 }
 
-
-//   let folderInfo = {name: folder.name, urls: urls}
-//
-//
-// console.log(folderArr);
-
-// const alphabetize = (folderArr) => {
-//   return folderArr.sort((a,z) => a.name.toUpperCase() < z.folderName.toUpperCase() ? -1 : 1)
-// }
-
 const printToPage = (folder) => {
   const display = document.getElementById('folder-display')
   let newFolder = document.createElement('div')
   let urlList = document.createElement('ul')
+  urlList.style.display = 'none'
 
   newFolder.classList.add('folders')
-  newFolder.append(folder.name)
+  let folderTitle = document.createElement('p')
+  folderTitle.classList.add('folder-names')
+  folderTitle.innerHTML += `${folder.name}`
+  newFolder.append(folderTitle)
   folder.urls.forEach(url => {
     let newLink = document.createElement('li')
     let aTag = document.createElement('a')
-    aTag.innerHTML += `localhost/${url.id}`
+    aTag.innerHTML += `localhost:3000/${url.id}`
     aTag.setAttribute('href', `http://www.${url.url}`)
     aTag.setAttribute('target', 'blank')
     newLink.append(aTag)
@@ -58,18 +52,20 @@ const printToPage = (folder) => {
   newFolder.append(urlList)
 
   let clickFolder = () => {
-    console.log(folder)
+    if(urlList.style.display === 'none') {
+      urlList.style.display = 'block'
+    } else {
+      urlList.style.display = 'none'
+    }
   }
 
-  newFolder.addEventListener('click', clickFolder)
+  folderTitle.addEventListener('click', clickFolder)
   display.append(newFolder)
 }
-
 
 const createFolder = () => {
   const makeFolderPopup = document.getElementById('folder-input-popup')
   makeFolderPopup.style.display = 'flex'
-
 }
 
 const submitFolder = () => {
@@ -105,12 +101,3 @@ createFolderButton.addEventListener('click', createFolder)
 
 let folderSubmitButton = document.getElementById('folder-submit-btn')
 folderSubmitButton.addEventListener('click', submitFolder)
-
-
-
-// const folderName = document.getElementById('folder-name').value
-
-
-//
-// let createFolderButton = document.getElementById('create-folder')
-// createFolderButton.addEventListener('click', submitFolder)
