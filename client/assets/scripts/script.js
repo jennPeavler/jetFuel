@@ -44,7 +44,7 @@ const printToPage = (folder) => {
     let newLink = document.createElement('li')
     let aTag = document.createElement('a')
     aTag.innerHTML += `localhost:3000/${url.id}`
-    aTag.setAttribute('href', `http://www.${url.url}`)
+    aTag.setAttribute('href', `http://localhost:3000/${url.id}`)
     aTag.setAttribute('target', 'blank')
     newLink.append(aTag)
     urlList.append(newLink)
