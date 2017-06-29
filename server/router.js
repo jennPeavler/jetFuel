@@ -5,5 +5,6 @@ const api = require('./api')
 router.get('/folders', api.folders)
 router.post('/folders', api.newFolder)
 router.get('/folders/:id/urls', api.retrieveFolderUrls)
+router.put('/urls/:id', api.increasePopularity)
 
 module.exports = router;

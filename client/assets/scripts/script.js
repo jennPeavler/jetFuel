@@ -40,12 +40,21 @@ const printToPage = (folder) => {
   folderTitle.classList.add('folder-names')
   folderTitle.innerHTML += `${folder.name}`
   newFolder.append(folderTitle)
+
+
   folder.urls.forEach(url => {
+    let incrementPopularity = () => {
+      fetch(`/api/v1/urls/${url.id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+      })
+    }
     let newLink = document.createElement('li')
     let aTag = document.createElement('a')
     aTag.innerHTML += `localhost:3000/${url.id}`
-    aTag.setAttribute('href', `http://www.${url.url}`)
+    aTag.setAttribute('href', `http://localhost:3000/${url.id}`)
     aTag.setAttribute('target', 'blank')
+    aTag.addEventListener('click', incrementPopularity)
     newLink.append(aTag)
     urlList.append(newLink)
   })
@@ -60,7 +69,7 @@ const printToPage = (folder) => {
   }
 
   folderTitle.addEventListener('click', clickFolder)
-  display.append(newFolder)
+  display.prepend(newFolder)
 }
 
 const createFolder = () => {
