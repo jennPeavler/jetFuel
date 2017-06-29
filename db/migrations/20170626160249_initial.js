@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary()
       table.string('url')
       table.string('description')
-      table.string('popularity')
+      table.integer('popularity').unsigned().defaultTo(1)
       table.integer('folder_id').unsigned()
       table.foreign('folder_id')
         .references('folders.id')
