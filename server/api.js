@@ -17,12 +17,12 @@ const newFolder = (req, res) => {
   const { name, url, description } = req.body
   database('folders').insert({name: name}, 'id')
   .then(folder => {
-    console.log(folder);
     database('urls').insert({url: url,
                             description: description,
                             folder_id: folder[0]}, 'id')
     .then(url => {
-      res.status(201).json(req.body)
+      let response = Object.assign({}, req.body, {id: url[0]})
+      res.status(201).json(response)
     })
   })
 
@@ -31,7 +31,6 @@ const newFolder = (req, res) => {
 
 const retrieveFolderUrls = (req, res) => {
   const { id } = req.params
-  console.log(id);
   database('urls').where('folder_id', id).select()
   .then(urls => {
       if (urls.length) {
