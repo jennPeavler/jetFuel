@@ -1,5 +1,5 @@
 let folderArr = []
-let root = 'https://jet-fuel-turing.herokuapp.com/'
+let root = 'https://jet-fuel-turing.herokuapp.com'
 
 window.onload = () => {
   function getFolders() {
