@@ -41,7 +41,6 @@ const printToPage = (folder) => {
   newFolder.append(folderTitle)
 
   const popularitySort = () => {
-    console.log('popular sort');
     fetch('/api/v1/folders')
     .then(response => response.json())
     .then(folders => {
@@ -50,8 +49,19 @@ const printToPage = (folder) => {
     })
     .then(match => {
       fetch(`http://localhost:3000/api/v1/folders/${match.id}/urls`)
+      .then(res => res.json())
       .then(urls => {
         console.log(urls)
+        let liArray = newFolder.getElementsByTagName("li")
+        let recursiveRemove = (arr) => {
+          if (arr.length) {
+            liArray[0].remove()
+            recursiveRemove(arr)
+          } else {
+            return
+          }
+        }
+        recursiveRemove(liArray)
       })
     })
   }
