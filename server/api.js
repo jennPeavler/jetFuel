@@ -84,6 +84,9 @@ const addNewUrl = (req, res) => {
     console.log(data)
     res.status(201).send(data)
   })
+  .catch(error => {
+    res.status(404).send({error: 'Can not add a url to a non-existing folder'})
+  })
 }
 
 module.exports = {
