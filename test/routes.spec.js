@@ -66,9 +66,15 @@ describe('API Routes', () => {
             ]})
       .end((err, response) => {
         response.should.have.status(201)
+        response.body.should.have.property('name')
+        response.body.name.should.equal('Bull')
+        response.body.should.have.property('urls')
+        response.body.urls.length.should.equal(2)
+
         done()
       })
     })
+
   })
 
 });
