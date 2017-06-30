@@ -73,8 +73,79 @@ describe('API Routes', () => {
 
         done()
       })
+
+      //NOTE: Can insert a new assertion:  Get folders from database and then test to make sure new one is there
     })
 
+    it('should not insert blank folder', (done) => {
+      chai.request(server)
+      .post('/api/v1/folders')
+      .send('this is garbage')
+      .end((err, response) => {
+        response.should.have.status(500)
+        // response.body.should.have.property('name')
+        // response.body.name.should.equal('Bull')
+        // response.body.should.have.property('urls')
+        // response.body.urls.length.should.equal(2)
+
+        done()
+      })
+    })
+
+
   })
+
+  describe('GET /api/v1/folders/:id/urls', () => {
+    it('should get the urls of a given folder', (done) => {
+      chai.request(server)
+      .get('/api/v1/folders/1/urls')
+      .end((err, response) => {
+        response.should.have.status(200)
+        response.body.should.be.an('array')
+        response.body.length.should.equal(3)
+        response.body[0].url.should.equal('google.com')
+        response.body[1].url.should.equal('pinball.com')
+        response.body[2].url.should.equal('kinggeorge.com')
+        done()
+      })
+    })
+  })
+
+  describe('POST /urls', () => {
+    it('should insert new url into a folder', (done) => {
+      chai.request(server)
+      .post('/api/v1/urls')
+      .send({
+        url: 'theoatmeal.com',
+        description: 'comic',
+        folder_id: 1
+      })
+      .end((err, response) => {
+        response.should.have.status(201)
+        console.log(response.body)
+        response.body.should.be.an('array')
+        response.body.length.should.equal(1)
+        response.body[0].should.equal(7)
+        done()
+      })
+    })
+
+    it('should not insert new url into a non-existing folder', (done) => {
+      chai.request(server)
+      .post('/api/v1/urls')
+      .send({
+        url: 'theoatmeal.com',
+        description: 'comic',
+        folder_id: 7
+      })
+      .end((err, response) => {
+        response.should.have.status(404)
+        response.body.error.should.equal('Can not add a url to a non-existing folder')
+        done()
+      })
+    })
+  })
+
+
 
 });
