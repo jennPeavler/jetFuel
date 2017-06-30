@@ -51,7 +51,6 @@ const printToPage = (folder) => {
       fetch(`http://localhost:3000/api/v1/folders/${match.id}/urls`)
       .then(res => res.json())
       .then(urls => {
-        console.log(urls)
         let liArray = newFolder.getElementsByTagName("li")
         let recursiveRemove = (arr) => {
           if (arr.length) {
@@ -62,6 +61,31 @@ const printToPage = (folder) => {
           }
         }
         recursiveRemove(liArray)
+
+        let urlsInOrder = urls.sort((a,b) => {
+          return b.popularity - a.popularity
+        })
+
+        urlsInOrder.forEach(url => {
+
+          let incrementPopularity = () => {
+            fetch(`/api/v1/urls/${url.id}`, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+            })
+          }
+          let urlDiv = document.createElement('div')
+          let newLink = document.createElement('li')
+          let aTag = document.createElement('a')
+          aTag.innerHTML += `localhost:3000/${url.id}`
+          aTag.setAttribute('href', `http://localhost:3000/${url.id}`)
+          aTag.setAttribute('target', 'blank')
+          aTag.addEventListener('click', incrementPopularity)
+          newLink.append(aTag)
+          urlList.append(newLink)
+
+        })
+
       })
     })
   }
@@ -140,10 +164,6 @@ const printToPage = (folder) => {
       })
 
       })
-
-    // NOTE:  Still need to append new url to page
-
-
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
@@ -173,15 +193,9 @@ const printToPage = (folder) => {
       urlList.style.display = 'none'
     }
   }
-
   folderTitle.addEventListener('click', clickFolder)
   display.prepend(newFolder)
 }
-
-// const createFolder = () => {
-//   const makeFolderPopup = document.getElementById('folder-input-popup')
-//   makeFolderPopup.style.display = 'flex'
-// }
 
 const submitFolder = () => {
   const newFolderName = document.getElementById('new-folder-name').value
@@ -210,10 +224,6 @@ const submitFolder = () => {
   .catch(error => console.log(error))
 
 }
-
-// let createFolderButton = document.getElementById('create-folder-btn')
-// createFolderButton.addEventListener('click', createFolder)
-
 
 let folderSubmitButton = document.getElementById('folder-submit-btn')
 folderSubmitButton.addEventListener('click', submitFolder)
