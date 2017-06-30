@@ -24,7 +24,9 @@ const newFolder = (req, res) => {
     })
     Promise.all(urlPromises)
     .then(data => {
-      console.log('line 27', data)
+      // NOTE: need to fix at some point
+      req.body.urls[0].id = data[0][0]
+      req.body.urls[1].id = data[1][0]
       res.status(201).json(req.body)
     })
   })
@@ -43,8 +45,8 @@ const retrieveFolderUrls = (req, res) => {
   database('urls').where('folder_id', id).select()
   .then(urls => {
       if (urls.length) {
-        let response = Object.assign({}, urls, {id: id})
-        console.log(response);
+        // let response = Object.assign({}, urls, {id: id})
+        // console.log(response);
         res.status(200).json(urls);
       } else {
         res.status(404).json({
