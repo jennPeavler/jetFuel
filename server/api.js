@@ -81,6 +81,7 @@ const addNewUrl = (req, res) => {
   console.log(url);
   database('urls').insert(req.body, 'id')
   .then(data => {
+    console.log(data)
     res.status(201).send(data)
   })
 }

@@ -110,9 +110,29 @@ const printToPage = (folder) => {
           'folder_id': match.id
         })
       })
-    })
+      .then(res => res.json())
+      .then(data => {
+        let incrementPopularity = () => {
+          fetch(`/api/v1/urls/${data[0]}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+          })
+        }
+        let urlDiv = document.createElement('div')
+        let newLink = document.createElement('li')
+        let aTag = document.createElement('a')
+        aTag.innerHTML += `localhost:3000/${data[0]}`
+        aTag.setAttribute('href', `http://localhost:3000/${data[0]}`)
+        aTag.setAttribute('target', 'blank')
+        aTag.addEventListener('click', incrementPopularity)
+        newLink.append(aTag)
+        urlList.append(newLink)
+      })
+
+      })
 
     // NOTE:  Still need to append new url to page
+
 
   }
 
