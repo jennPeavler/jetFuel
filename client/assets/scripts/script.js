@@ -1,10 +1,11 @@
 let folderArr = []
-let root = 'https://jet-fuel-turing.herokuapp.com'
+let host = window.location.href
+let root = host
 
 window.onload = () => {
   function getFolders() {
     return new Promise(function(resolve) {
-      fetch(`${root}/api/v1/folders`)
+      fetch(`${root}api/v1/folders`)
       .then(res => res.json())
       .then(response => {
         resolve(response)
@@ -16,7 +17,7 @@ window.onload = () => {
     let folders = await getFolders()
 
     await Promise.all(folders.map(async (folder) => {
-      const test = await fetch(`${root}/api/v1/folders/${folder.id}/urls`)
+      const test = await fetch(`${root}api/v1/folders/${folder.id}/urls`)
       .then(res => res.json())
       .then(data => {
         let newFolder = {name: folder.name, urls: data}
@@ -49,7 +50,7 @@ const printToPage = (folder) => {
       return match
     })
     .then(match => {
-      fetch(`${root}/api/v1/folders/${match.id}/urls`)
+      fetch(`${root}api/v1/folders/${match.id}/urls`)
       .then(res => res.json())
       .then(urls => {
         let liArray = newFolder.getElementsByTagName("li")
@@ -78,8 +79,8 @@ const printToPage = (folder) => {
           let urlDiv = document.createElement('div')
           let newLink = document.createElement('li')
           let aTag = document.createElement('a')
-          aTag.innerHTML += `${root}/${url.id}`
-          aTag.setAttribute('href', `${root}/${url.id}`)
+          aTag.innerHTML += `${root}${url.id}`
+          aTag.setAttribute('href', `${root}${url.id}`)
           aTag.setAttribute('target', 'blank')
           aTag.addEventListener('click', incrementPopularity)
           newLink.append(aTag)
@@ -178,8 +179,8 @@ const printToPage = (folder) => {
     }
     let newLink = document.createElement('li')
     let aTag = document.createElement('a')
-    aTag.innerHTML += `${root}/${url.id}`
-    aTag.setAttribute('href', `${root}/${url.id}`)
+    aTag.innerHTML += `${root}${url.id}`
+    aTag.setAttribute('href', `${root}${url.id}`)
     aTag.setAttribute('target', 'blank')
     aTag.addEventListener('click', incrementPopularity)
     newLink.append(aTag)
