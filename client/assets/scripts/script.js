@@ -19,6 +19,7 @@ window.onload = () => {
       .then(res => res.json())
       .then(data => {
         let newFolder = {name: folder.name, urls: data}
+        console.log('loaded data', newFolder)
         printToPage(newFolder)
         folderArr.push(newFolder)
       })
@@ -32,7 +33,13 @@ window.onload = () => {
 const printToPage = (folder) => {
   const display = document.getElementById('folder-display')
   let newFolder = document.createElement('div')
+
+
   let urlList = document.createElement('ul')
+  let popularityButton = document.createElement('button')
+  let newestButton = document.createElement('button')
+  urlList.append(popularityButton)
+  urlList.append(newestButton)
   urlList.style.display = 'none'
 
   newFolder.classList.add('folders')
@@ -72,40 +79,41 @@ const printToPage = (folder) => {
   display.prepend(newFolder)
 }
 
-const createFolder = () => {
-  const makeFolderPopup = document.getElementById('folder-input-popup')
-  makeFolderPopup.style.display = 'flex'
-}
+// const createFolder = () => {
+//   const makeFolderPopup = document.getElementById('folder-input-popup')
+//   makeFolderPopup.style.display = 'flex'
+// }
 
 const submitFolder = () => {
   const newFolderName = document.getElementById('new-folder-name').value
   const newUrl = document.getElementById('new-url').value
   const newUrlDescription = document.getElementById('new-url-description').value
+  const newUrl2 = document.getElementById('new-url2').value
+  const newUrlDescription2 = document.getElementById('new-url-description2').value
+
+  const urlData = [{url: newUrl, description: newUrlDescription}, {url: newUrl2, description: newUrlDescription2}]
 
   fetch('/api/v1/folders', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       'name': newFolderName,
-      'url': newUrl,
-      'description': newUrlDescription
+      'urls': urlData
     })
   })
   .then(res => res.json())
   .then(data => {
-    console.log(data);
-    const {name, url, description, id} = data
-    let test = {name: name, urls: [{url: url, id: id}], description: description}
-    printToPage(test)
+    console.log('submitted folder data', data);
+    const {name, urls, id} = data
+    let folderInfo = {name: name, urls: urls}
+    printToPage(folderInfo)
   })
   .catch(error => console.log(error))
 
-  const makeFolderPopup = document.getElementById('folder-input-popup')
-  makeFolderPopup.style.display = 'none'
 }
 
-let createFolderButton = document.getElementById('create-folder-btn')
-createFolderButton.addEventListener('click', createFolder)
+// let createFolderButton = document.getElementById('create-folder-btn')
+// createFolderButton.addEventListener('click', createFolder)
 
 
 let folderSubmitButton = document.getElementById('folder-submit-btn')

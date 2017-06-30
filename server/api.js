@@ -14,19 +14,28 @@ const folders = (req, res) => {
 }
 
 const newFolder = (req, res) => {
-  const { name, url, description } = req.body
+  const { name, urls } = req.body
   database('folders').insert({name: name}, 'id')
-  .then(folder => {
-    database('urls').insert({url: url,
-                            description: description,
-                            folder_id: folder[0]}, 'id')
-    .then(url => {
-      let response = Object.assign({}, req.body, {id: url[0]})
-      res.status(201).json(response)
+  .then((folder) => {
+    let urlPromises = []
+
+    urls.forEach((url) => {
+      urlPromises.push(insertUrlToDB(url, folder))
+    })
+    Promise.all(urlPromises)
+    .then(data => {
+      console.log('line 27', data)
+      res.status(201).json(req.body)
     })
   })
-
   .catch(error => res.status(500).json({error}))
+}
+
+const insertUrlToDB = (url, folder) => {
+  console.log(folder)
+  return database('urls').insert({url: url.url,
+                                  description: url.description,
+                                  folder_id: folder[0]}, 'id')
 }
 
 const retrieveFolderUrls = (req, res) => {
