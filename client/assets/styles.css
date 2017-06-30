@@ -69,6 +69,45 @@ nav {
   color: #3A8273;
 }
 
+#drop-nav {
+  display: flex;
+}
+
+.sort-btn {
+  width: 80px;
+  height: 20px;
+  background: #3A8273;
+  padding: 2px 10px;
+  border: none;
+  margin-right: 20px;
+}
+
+.new-url-input {
+  width: 150px;
+  /*margin-left: 5%;*/
+  height: 30px;
+  background: #333333;
+  border: none;
+  border-bottom: 1px solid #3A8273;
+  font-family: 'Arimo', sans-serif;
+}
+
+.new-url-input::placeholder {
+  color: #F6ECCC;
+  font-family: 'Arimo', sans-serif;
+}
+
+#add-url-btn {
+  width: 150px;
+  height: 20px;
+  background: #F6ECCC;
+  padding: 2px 10px;
+  border: none;
+  margin-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
 #folder-input-popup {
   background: rgba(58,130,115, 1);
   width: 40%;

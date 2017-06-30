@@ -33,21 +33,90 @@ window.onload = () => {
 const printToPage = (folder) => {
   const display = document.getElementById('folder-display')
   let newFolder = document.createElement('div')
-
-
-  let urlList = document.createElement('ul')
-  let popularityButton = document.createElement('button')
-  let newestButton = document.createElement('button')
-  urlList.append(popularityButton)
-  urlList.append(newestButton)
-  urlList.style.display = 'none'
-
   newFolder.classList.add('folders')
+
   let folderTitle = document.createElement('p')
   folderTitle.classList.add('folder-names')
   folderTitle.innerHTML += `${folder.name}`
   newFolder.append(folderTitle)
 
+  const popularitySort = () => {
+    console.log('popular sort');
+    fetch('/api/v1/folders')
+    .then(response => response.json())
+    .then(folders => {
+      let match = folders.find(returnedFolder => returnedFolder.name === folder.name)
+      return match
+    })
+    .then(match => {
+      fetch(`http://localhost:3000/api/v1/folders/${match.id}/urls`)
+      .then(urls => {
+        console.log(urls)
+      })
+    })
+  }
+
+  const dateSort = () => {
+    console.log('date sort');
+  }
+
+  let urlList = document.createElement('ul')
+  let dropNav = document.createElement('div')
+  dropNav.setAttribute('id', 'drop-nav')
+  let popularityButton = document.createElement('button')
+  let dateButton = document.createElement('button')
+  dateButton.innerHTML = 'date'
+  popularityButton.innerHTML = 'popularity'
+  popularityButton.classList.add('sort-btn')
+  dateButton.classList.add('sort-btn')
+  dropNav.append(popularityButton, dateButton)
+  popularityButton.addEventListener('click', popularitySort)
+  dateButton.addEventListener('click', dateSort)
+
+  let newUrlField = document.createElement('div')
+  let addUrlInput = document.createElement('input')
+  addUrlInput.setAttribute('type', 'text')
+  let addUrlDescription = document.createElement('input')
+  addUrlInput.classList.add('new-url-input')
+  addUrlInput.setAttribute('placeholder', 'Enter url')
+  addUrlInput.setAttribute('id', 'add-url-input')
+  addUrlDescription.classList.add('new-url-input')
+  addUrlDescription.setAttribute('placeholder', 'Enter url description')
+  addUrlDescription.setAttribute('id', 'url-description-input')
+  let addUrlButton = document.createElement('button')
+  addUrlButton.setAttribute('id', 'add-url-btn')
+  addUrlButton.innerHTML = 'Sumbit url'
+  newUrlField.append(addUrlInput, addUrlDescription, addUrlButton)
+  urlList.append(newUrlField)
+  urlList.append(dropNav)
+  urlList.style.display = 'none'
+
+  let submitNewUrl = () => {
+
+    fetch('/api/v1/folders')
+    .then(response => response.json())
+    .then(res => {
+      let match =  res.find(returnedFolder => returnedFolder.name === folder.name )
+      return match
+    })
+    .then(match => {
+      console.log(match)
+      fetch('/api/v1/urls', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          'url': addUrlInput.value,
+          'description': addUrlDescription.value,
+          'folder_id': match.id
+        })
+      })
+    })
+
+    // NOTE:  Still need to append new url to page
+
+  }
+
+  addUrlButton.addEventListener('click', submitNewUrl)
 
   folder.urls.forEach(url => {
     let incrementPopularity = () => {

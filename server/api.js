@@ -43,6 +43,8 @@ const retrieveFolderUrls = (req, res) => {
   database('urls').where('folder_id', id).select()
   .then(urls => {
       if (urls.length) {
+        let response = Object.assign({}, urls, {id: id})
+        console.log(response);
         res.status(200).json(urls);
       } else {
         res.status(404).json({
@@ -71,10 +73,21 @@ const increasePopularity = (req, res) => {
   })
 }
 
+const addNewUrl = (req, res) => {
+  console.log('adding a new url')
+  const { url, description, folder_id } = req.body
+  console.log(url);
+  database('urls').insert(req.body, 'id')
+  .then(data => {
+    res.status(201).send(data)
+  })
+}
+
 module.exports = {
   folders: folders,
   newFolder: newFolder,
   retrieveFolderUrls: retrieveFolderUrls,
   reRouteLink: reRouteLink,
-  increasePopularity: increasePopularity
+  increasePopularity: increasePopularity,
+  addNewUrl: addNewUrl
 }
