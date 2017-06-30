@@ -41,7 +41,6 @@ const printToPage = (folder) => {
   newFolder.append(folderTitle)
 
   const popularitySort = () => {
-    console.log('popular sort');
     fetch('/api/v1/folders')
     .then(response => response.json())
     .then(folders => {
@@ -50,8 +49,43 @@ const printToPage = (folder) => {
     })
     .then(match => {
       fetch(`http://localhost:3000/api/v1/folders/${match.id}/urls`)
+      .then(res => res.json())
       .then(urls => {
-        console.log(urls)
+        let liArray = newFolder.getElementsByTagName("li")
+        let recursiveRemove = (arr) => {
+          if (arr.length) {
+            liArray[0].remove()
+            recursiveRemove(arr)
+          } else {
+            return
+          }
+        }
+        recursiveRemove(liArray)
+
+        let urlsInOrder = urls.sort((a,b) => {
+          return b.popularity - a.popularity
+        })
+
+        urlsInOrder.forEach(url => {
+
+          let incrementPopularity = () => {
+            fetch(`/api/v1/urls/${url.id}`, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+            })
+          }
+          let urlDiv = document.createElement('div')
+          let newLink = document.createElement('li')
+          let aTag = document.createElement('a')
+          aTag.innerHTML += `localhost:3000/${url.id}`
+          aTag.setAttribute('href', `http://localhost:3000/${url.id}`)
+          aTag.setAttribute('target', 'blank')
+          aTag.addEventListener('click', incrementPopularity)
+          newLink.append(aTag)
+          urlList.append(newLink)
+
+        })
+
       })
     })
   }
@@ -110,10 +144,26 @@ const printToPage = (folder) => {
           'folder_id': match.id
         })
       })
-    })
+      .then(res => res.json())
+      .then(data => {
+        let incrementPopularity = () => {
+          fetch(`/api/v1/urls/${data[0]}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+          })
+        }
+        let urlDiv = document.createElement('div')
+        let newLink = document.createElement('li')
+        let aTag = document.createElement('a')
+        aTag.innerHTML += `localhost:3000/${data[0]}`
+        aTag.setAttribute('href', `http://localhost:3000/${data[0]}`)
+        aTag.setAttribute('target', 'blank')
+        aTag.addEventListener('click', incrementPopularity)
+        newLink.append(aTag)
+        urlList.append(newLink)
+      })
 
-    // NOTE:  Still need to append new url to page
-
+      })
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
@@ -143,15 +193,9 @@ const printToPage = (folder) => {
       urlList.style.display = 'none'
     }
   }
-
   folderTitle.addEventListener('click', clickFolder)
   display.prepend(newFolder)
 }
-
-// const createFolder = () => {
-//   const makeFolderPopup = document.getElementById('folder-input-popup')
-//   makeFolderPopup.style.display = 'flex'
-// }
 
 const submitFolder = () => {
   const newFolderName = document.getElementById('new-folder-name').value
@@ -180,10 +224,6 @@ const submitFolder = () => {
   .catch(error => console.log(error))
 
 }
-
-// let createFolderButton = document.getElementById('create-folder-btn')
-// createFolderButton.addEventListener('click', createFolder)
-
 
 let folderSubmitButton = document.getElementById('folder-submit-btn')
 folderSubmitButton.addEventListener('click', submitFolder)
