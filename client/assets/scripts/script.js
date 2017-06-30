@@ -16,7 +16,7 @@ window.onload = () => {
     let folders = await getFolders()
 
     await Promise.all(folders.map(async (folder) => {
-      const test = await fetch(`http://${root}/api/v1/folders/${folder.id}/urls`)
+      const test = await fetch(`${root}/api/v1/folders/${folder.id}/urls`)
       .then(res => res.json())
       .then(data => {
         let newFolder = {name: folder.name, urls: data}
@@ -49,7 +49,7 @@ const printToPage = (folder) => {
       return match
     })
     .then(match => {
-      fetch(`http://${root}/api/v1/folders/${match.id}/urls`)
+      fetch(`${root}/api/v1/folders/${match.id}/urls`)
       .then(res => res.json())
       .then(urls => {
         let liArray = newFolder.getElementsByTagName("li")
@@ -79,7 +79,7 @@ const printToPage = (folder) => {
           let newLink = document.createElement('li')
           let aTag = document.createElement('a')
           aTag.innerHTML += `${root}/${url.id}`
-          aTag.setAttribute('href', `http://${root}/${url.id}`)
+          aTag.setAttribute('href', `${root}/${url.id}`)
           aTag.setAttribute('target', 'blank')
           aTag.addEventListener('click', incrementPopularity)
           newLink.append(aTag)
@@ -157,7 +157,7 @@ const printToPage = (folder) => {
         let newLink = document.createElement('li')
         let aTag = document.createElement('a')
         aTag.innerHTML += `${root}/${data[0]}`
-        aTag.setAttribute('href', `http://${root}/${data[0]}`)
+        aTag.setAttribute('href', `${root}/${data[0]}`)
         aTag.setAttribute('target', 'blank')
         aTag.addEventListener('click', incrementPopularity)
         newLink.append(aTag)
@@ -179,7 +179,7 @@ const printToPage = (folder) => {
     let newLink = document.createElement('li')
     let aTag = document.createElement('a')
     aTag.innerHTML += `${root}/${url.id}`
-    aTag.setAttribute('href', `http://${root}/${url.id}`)
+    aTag.setAttribute('href', `${root}/${url.id}`)
     aTag.setAttribute('target', 'blank')
     aTag.addEventListener('click', incrementPopularity)
     newLink.append(aTag)
