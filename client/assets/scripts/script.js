@@ -1,6 +1,8 @@
 let folderArr = []
 let host = window.location.href
 let root = host
+let popularityOrder = true;
+let dateOrder = false;
 
 window.onload = () => {
   function getFolders() {
@@ -47,6 +49,7 @@ const printToPage = (folder) => {
   newFolder.append(folderTitle)
 
   const popularitySort = () => {
+    popularityOrder = !popularityOrder
     fetch('/api/v1/folders')
     .then(response => response.json())
     .then(folders => {
@@ -69,7 +72,11 @@ const printToPage = (folder) => {
         recursiveRemove(liArray)
 
         let urlsInOrder = urls.sort((a,b) => {
-          return b.popularity - a.popularity
+          if(popularityOrder) {
+            return a.popularity - b.popularity
+          } else {
+            return b.popularity - a.popularity
+          }
         })
 
         urlsInOrder.forEach(url => {
@@ -167,9 +174,12 @@ const printToPage = (folder) => {
         aTag.addEventListener('click', incrementPopularity)
         newLink.append(aTag)
         urlList.append(newLink)
+
+        addUrlInput.value = ''
+        addUrlDescription.value = ''
       })
 
-      })
+    })
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
