@@ -6,7 +6,6 @@ const bodyParser = require('body-parser')
 const api = require('./api')
 
 
-
 app.use(bodyParser.json());
 
 app.use('/assets', express.static(path.join(__dirname, '../client/assets/')))

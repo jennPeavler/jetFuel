@@ -146,6 +146,27 @@ describe('API Routes', () => {
     })
   })
 
+  describe('PUT /urls/:id', () => {
+    it('should increment popularity ', (done) => {
+      chai.request(server)
+      .put('/api/v1/urls/1')
+      .end((err, response) => {
+        response.should.have.status(202)
+        done()
+      })
+    })
+  })
+
+  describe('GET /:id', () => {
+    it('reroute long link ', (done) => {
+      chai.request(server)
+      .get('/1')
+      .end((err, response) => {
+        response.should.have.status(200)
+        done()
+      })
+    })
+  })
 
 
 });

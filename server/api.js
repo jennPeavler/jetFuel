@@ -24,7 +24,7 @@ const newFolder = (req, res) => {
     })
     Promise.all(urlPromises)
     .then(data => {
-      // NOTE: need to fix at some point
+      // NOTE: need to un-hardcode at some point
       req.body.urls[0].id = data[0][0]
       req.body.urls[1].id = data[1][0]
       res.status(201).json(req.body)
@@ -72,6 +72,7 @@ const increasePopularity = (req, res) => {
   const { id } = req.params
   database('urls').where('id', id).increment('popularity', 1)
   .then((data) => {
+    res.status(202).send({message: 'popularity incremented'})
   })
 }
 
