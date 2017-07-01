@@ -161,8 +161,8 @@ const printToPage = (folder) => {
         let urlDiv = document.createElement('div')
         let newLink = document.createElement('li')
         let aTag = document.createElement('a')
-        aTag.innerHTML += `${root}/${data[0]}`
-        aTag.setAttribute('href', `${root}/${data[0]}`)
+        aTag.innerHTML += `${root}${data[0]}`
+        aTag.setAttribute('href', `${root}${data[0]}`)
         aTag.setAttribute('target', 'blank')
         aTag.addEventListener('click', incrementPopularity)
         newLink.append(aTag)
@@ -205,11 +205,11 @@ const printToPage = (folder) => {
 }
 
 const submitFolder = () => {
-  const newFolderName = document.getElementById('new-folder-name').value
-  const newUrl = document.getElementById('new-url').value
-  const newUrlDescription = document.getElementById('new-url-description').value
+  let newFolderName = document.getElementById('new-folder-name').value
+  let newUrl = document.getElementById('new-url').value
+  let newUrlDescription = document.getElementById('new-url-description').value
 
-  const urlData = [{url: newUrl, description: newUrlDescription}]
+  let urlData = [{url: newUrl, description: newUrlDescription}]
 
   fetch('/api/v1/folders', {
     method: 'POST',
@@ -233,6 +233,9 @@ const submitFolder = () => {
   })
   .catch(error => console.log(error))
 
+  document.getElementById('new-folder-name').value = ''
+  document.getElementById('new-url').value = ''
+  document.getElementById('new-url-description').value = ''
 }
 
 let folderSubmitButton = document.getElementById('folder-submit-btn')
