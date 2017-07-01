@@ -20,10 +20,14 @@ window.onload = () => {
       const test = await fetch(`${root}api/v1/folders/${folder.id}/urls`)
       .then(res => res.json())
       .then(data => {
-        let newFolder = {name: folder.name, urls: data}
-        console.log('loaded data', newFolder)
+          let newFolder = {name: folder.name, urls: data}
+          printToPage(newFolder)
+          folderArr.push(newFolder)
+
+      })
+      .catch(error => {
+        let newFolder = {name: folder.name}
         printToPage(newFolder)
-        folderArr.push(newFolder)
       })
     }))
   }
@@ -169,23 +173,24 @@ const printToPage = (folder) => {
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
-
-  folder.urls.forEach(url => {
-    let incrementPopularity = () => {
-      fetch(`/api/v1/urls/${url.id}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-      })
-    }
-    let newLink = document.createElement('li')
-    let aTag = document.createElement('a')
-    aTag.innerHTML += `${root}${url.id}`
-    aTag.setAttribute('href', `${root}${url.id}`)
-    aTag.setAttribute('target', 'blank')
-    aTag.addEventListener('click', incrementPopularity)
-    newLink.append(aTag)
-    urlList.append(newLink)
-  })
+  if(folder.urls) {
+    folder.urls.forEach(url => {
+      let incrementPopularity = () => {
+        fetch(`/api/v1/urls/${url.id}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+        })
+      }
+      let newLink = document.createElement('li')
+      let aTag = document.createElement('a')
+      aTag.innerHTML += `${root}${url.id}`
+      aTag.setAttribute('href', `${root}${url.id}`)
+      aTag.setAttribute('target', 'blank')
+      aTag.addEventListener('click', incrementPopularity)
+      newLink.append(aTag)
+      urlList.append(newLink)
+    })
+  }
   newFolder.append(urlList)
 
   let clickFolder = () => {
@@ -203,10 +208,8 @@ const submitFolder = () => {
   const newFolderName = document.getElementById('new-folder-name').value
   const newUrl = document.getElementById('new-url').value
   const newUrlDescription = document.getElementById('new-url-description').value
-  const newUrl2 = document.getElementById('new-url2').value
-  const newUrlDescription2 = document.getElementById('new-url-description2').value
 
-  const urlData = [{url: newUrl, description: newUrlDescription}, {url: newUrl2, description: newUrlDescription2}]
+  const urlData = [{url: newUrl, description: newUrlDescription}]
 
   fetch('/api/v1/folders', {
     method: 'POST',
@@ -220,8 +223,13 @@ const submitFolder = () => {
   .then(data => {
     console.log('submitted folder data', data);
     const {name, urls, id} = data
-    let folderInfo = {name: name, urls: urls}
-    printToPage(folderInfo)
+    if (urls) {
+      let folderInfo = {name: name, urls: urls}
+      printToPage(folderInfo)
+    } else {
+      let folderInfo = {name: name}
+      printToPage(folderInfo)
+    }
   })
   .catch(error => console.log(error))
 

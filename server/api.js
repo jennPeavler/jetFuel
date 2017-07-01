@@ -17,18 +17,21 @@ const newFolder = (req, res) => {
   const { name, urls } = req.body
   database('folders').insert({name: name}, 'id')
   .then((folder) => {
-    let urlPromises = []
+    if(urls[0].url) {
+      let urlPromises = []
 
-    urls.forEach((url) => {
-      urlPromises.push(insertUrlToDB(url, folder))
-    })
-    Promise.all(urlPromises)
-    .then(data => {
-      // NOTE: need to un-hardcode at some point
-      req.body.urls[0].id = data[0][0]
-      req.body.urls[1].id = data[1][0]
-      res.status(201).json(req.body)
-    })
+      urls.forEach((url) => {
+        urlPromises.push(insertUrlToDB(url, folder))
+      })
+      Promise.all(urlPromises)
+      .then(data => {
+        // NOTE: need to un-hardcode at some point
+        req.body.urls[0].id = data[0][0]
+        res.status(201).json(req.body)
+      })
+    } else {
+      res.status(201).json({name: req.body.name})
+    }
   })
   .catch(error => res.status(500).json({error}))
 }

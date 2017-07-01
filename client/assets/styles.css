@@ -12,6 +12,7 @@ main {
 }
 
 #search-bar {
+  display: none;
   width: 30%;
   margin-left: 5%;
   height: 30px;
