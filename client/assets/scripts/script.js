@@ -2,7 +2,7 @@ let folderArr = []
 let host = window.location.href
 let root = host
 let popularityOrder = true;
-let dateOrder = false;
+let dateOrder = true;
 
 window.onload = () => {
   function getFolders() {
@@ -104,7 +104,63 @@ const printToPage = (folder) => {
   }
 
   const dateSort = () => {
-    console.log('date sort');
+    console.log(dateOrder)
+    dateOrder = !dateOrder
+    fetch('/api/v1/folders')
+    .then(response => response.json())
+    .then(folders => {
+      let match = folders.find(returnedFolder => returnedFolder.name === folder.name)
+      return match
+    })
+    .then(match => {
+      fetch(`${root}api/v1/folders/${match.id}/urls`)
+      .then(res => res.json())
+      .then(urls => {
+        let liArray = newFolder.getElementsByTagName("li")
+        let recursiveRemove = (arr) => {
+          if (arr.length) {
+            liArray[0].remove()
+            recursiveRemove(arr)
+          } else {
+            return
+          }
+        }
+        recursiveRemove(liArray)
+
+        let urlsInOrder = urls.sort((a,b) => {
+          console.log('url', a.created_at);
+          console.log(typeof(a.created_at))
+          console.log(Date.parse(a.created_at))
+          console.log('url', b.created_at);
+          if(dateOrder) {
+            return Date.parse(a.created_at) - Date.parse(b.created_at)
+          } else {
+            return Date.parse(b.created_at) - Date.parse(a.created_at)
+          }
+        })
+
+        urlsInOrder.forEach(url => {
+
+          let incrementPopularity = () => {
+            fetch(`/api/v1/urls/${url.id}`, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+            })
+          }
+          let urlDiv = document.createElement('div')
+          let newLink = document.createElement('li')
+          let aTag = document.createElement('a')
+          aTag.innerHTML += `${root}${url.id}`
+          aTag.setAttribute('href', `${root}${url.id}`)
+          aTag.setAttribute('target', 'blank')
+          aTag.addEventListener('click', incrementPopularity)
+          newLink.append(aTag)
+          urlList.append(newLink)
+
+        })
+
+      })
+    })
   }
 
   let urlList = document.createElement('ul')
@@ -147,7 +203,6 @@ const printToPage = (folder) => {
       return match
     })
     .then(match => {
-      console.log(match)
       fetch('/api/v1/urls', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -231,7 +286,6 @@ const submitFolder = () => {
   })
   .then(res => res.json())
   .then(data => {
-    console.log('submitted folder data', data);
     const {name, urls, id} = data
     if (urls) {
       let folderInfo = {name: name, urls: urls}
