@@ -4,6 +4,7 @@ const path = require('path')
 const router = require('./router')
 const bodyParser = require('body-parser')
 const api = require('./api')
+const port = (process.env.PORT || 3000)
 
 
 app.use(bodyParser.json());
@@ -16,8 +17,8 @@ app.use('/api/v1', router)
 
 app.get('/:id', api.reRouteLink)
 
-app.listen(3000, function () {
-  console.log('Jetfuel server listening on port 3000!')
+app.listen(port, function () {
+  console.log('Jetfuel server listening on port' + `${port}!`)
 })
 
 module.exports = app
