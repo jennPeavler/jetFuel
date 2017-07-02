@@ -39,6 +39,16 @@ window.onload = () => {
 
 }
 
+const errorMessage = (error) => {
+  if (error == 'bad url') {
+    alert('You Submitted a Bad URL')
+  } else {
+    let form = document.getElementById('folder-input-popup')
+    let message = "Your Folder was created but without urls. Damnit Brittany."
+    form.append(message)
+  }
+}
+
 const printToPage = (folder) => {
   const display = document.getElementById('folder-display')
   let newFolder = document.createElement('div')
@@ -245,13 +255,15 @@ const printToPage = (folder) => {
           newLink.append(aTag)
           urlList.append(newLink)
 
+
         })
 
       })
+    } else {
+      errorMessage('bad url')
     }
     addUrlInput.value = ''
     addUrlDescription.value = ''
-
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
@@ -306,7 +318,7 @@ const submitFolder = () => {
   }
 
   let urlData = [{url: newUrl, description: newUrlDescription}]
-  //if (regexTest() && topLevelDomainCheck()) {
+  if (regexTest() && topLevelDomainCheck()) {
     fetch('/api/v1/folders', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -318,16 +330,34 @@ const submitFolder = () => {
     .then(res => res.json())
     .then(data => {
       const {name, urls, id} = data
-      if (urls && regexTest() && topLevelDomainCheck()) {
+      console.log(data)
+      if (urls) {
         let folderInfo = {name: name, urls: urls}
         printToPage(folderInfo)
       } else {
         let folderInfo = {name: name}
         printToPage(folderInfo)
+        errorMessage()
       }
     })
     .catch(error => console.log(error))
-
+  } else {
+    fetch(`/api/v1/folders/${newFolderName}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        'name': newFolderName,
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const {name, id} = data
+      console.log(data)
+        let folderInfo = {name: name}
+        printToPage(folderInfo) 
+    })
+    .catch(error => console.log(error))
+  }
   document.getElementById('new-folder-name').value = ''
   document.getElementById('new-url').value = ''
   document.getElementById('new-url-description').value = ''

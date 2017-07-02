@@ -13,6 +13,19 @@ const folders = (req, res) => {
   });
 }
 
+const newFolderName = (req, res) => {
+  const {name} = req.body
+  database('folders').insert({name: name}, 'id')
+  .then((folder) => {
+    let response = Object.assign({}, req.body, {id: folder[0]})
+    res.status(201).json(response)
+  })
+  .catch((error) => {
+    res.send(error)
+  })
+}
+
+
 const newFolder = (req, res) => {
   const { name, urls } = req.body
   database('folders').insert({name: name}, 'id')
@@ -100,5 +113,6 @@ module.exports = {
   retrieveFolderUrls: retrieveFolderUrls,
   reRouteLink: reRouteLink,
   increasePopularity: increasePopularity,
-  addNewUrl: addNewUrl
+  addNewUrl: addNewUrl,
+  newFolderName: newFolderName
 }
