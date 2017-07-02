@@ -20,6 +20,7 @@ main {
   border: none;
   border-bottom: 3px solid #3A8273;
   font-family: 'Arimo', sans-serif;
+  color: #F6ECCC;
 }
 
 #search-bar::placeholder {
@@ -178,6 +179,7 @@ ul {
 a {
   text-decoration: none;
   color: #BCEBCB;
+  margin-left: 20px;
 }
 
 a:hover {
