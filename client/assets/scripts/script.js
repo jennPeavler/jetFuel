@@ -1,6 +1,6 @@
-// let folderArr = []
 let host = window.location.href
 let root = host
+let shortRoot = root.substring(7)
 let popularityOrder = true;
 let dateOrder = true;
 
@@ -73,8 +73,9 @@ let generateLinks = (urlList, url) => {
 
   let urlDiv = document.createElement('div')
   let newLink = document.createElement('li')
+  newLink.innerHTML += url.description
   let aTag = document.createElement('a')
-  aTag.innerHTML += `${root}${url.id}`
+  aTag.innerHTML += `${shortRoot}${url.id}`
   aTag.setAttribute('href', `${root}${url.id}`)
   aTag.setAttribute('target', 'blank')
   aTag.addEventListener('click', incrementPopularity)
@@ -206,8 +207,8 @@ const printToPage = (folder) => {
         })
         .then(res => res.json())
         .then(data => {
-          console.log('i fired and here is my data',  data);
-          generateLinks(urlList, {id: data[0]})
+          const { id, description } = data
+          generateLinks(urlList, {id, description})
           addUrlInput.value = ''
           addUrlDescription.value = ''
         })
