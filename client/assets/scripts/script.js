@@ -180,6 +180,7 @@ const printToPage = (folder) => {
   addUrlInput.classList.add('new-url-input')
   addUrlInput.setAttribute('placeholder', 'Enter url')
   addUrlInput.setAttribute('id', 'add-url-input')
+  addUrlDescription.setAttribute('maxlength', 10)
   addUrlDescription.classList.add('new-url-input')
   addUrlDescription.setAttribute('placeholder', 'Enter url description')
   addUrlDescription.setAttribute('id', 'url-description-input')
@@ -295,6 +296,7 @@ let newFolderPostRequest = (newFolderName, urlData) => {
     }
   })
   .catch(error => console.log(error))
+  clear()
 }
 
 let newFolderNameOnlyPostRequest = (newFolderName) => {
@@ -323,4 +325,28 @@ let clear = () => {
   document.getElementById('new-url-description').value = ''
 }
 
+let searchFolder = () => {
+  let search = document.getElementById('search-bar').value
+  let folderNames = document.getElementsByClassName('folder-names')
+  console.log(folderNames);
+  for(let i = 0; i < folderNames.length; i++) {
+    if (search === folderNames[i].innerHTML) {
+      console.log('hit');
+    }
+  }
+}
+
+// $('#search').on('keyup', function() {
+//     var searchInput = $(this).val().toLowerCase();
+//     $('.title-line').each(function() {
+//       var searchText = $(this).text().toLowerCase();
+//       if (!!searchText.match(searchInput)) {
+//         $(this).closest('.idea-card').toggle(true);
+//       }else {
+//         $(this).closest('.idea-card').toggle(false);
+//       }
+//     });
+// });
+
 document.getElementById('folder-submit-btn').addEventListener('click', submitFolder)
+document.getElementById('search-bar').addEventListener('keyup', searchFolder)
