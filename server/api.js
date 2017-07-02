@@ -8,13 +8,12 @@ const folders = (req, res) => {
     res.status(200).json(folders);
   })
   .catch(error => {
-    console.error('error: ', error)
     res.status(500)
   });
 }
 
 const newFolderName = (req, res) => {
-  const {name} = req.body
+  const { name } = req.body
   database('folders').insert({name: name}, 'id')
   .then((folder) => {
     let response = Object.assign({}, req.body, {id: folder[0]})
@@ -24,7 +23,6 @@ const newFolderName = (req, res) => {
     res.send(error)
   })
 }
-
 
 const newFolder = (req, res) => {
   const { name, urls } = req.body
@@ -80,7 +78,6 @@ const reRouteLink = (req, res) => {
   database('urls').where('id', id).select('url')
   .then(longUrl => {
     const { url } = longUrl[0]
-    console.log(url);
     res.redirect(302, `${url}`)
   })
 }
@@ -94,12 +91,9 @@ const increasePopularity = (req, res) => {
 }
 
 const addNewUrl = (req, res) => {
-  console.log('adding a new url')
   const { url, description, folder_id } = req.body
-  console.log(url);
   database('urls').insert(req.body, 'id')
   .then(data => {
-    console.log(data)
     res.status(201).send(data)
   })
   .catch(error => {
