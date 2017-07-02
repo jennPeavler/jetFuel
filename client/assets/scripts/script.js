@@ -4,6 +4,7 @@ let root = host
 let popularityOrder = true;
 let dateOrder = true;
 
+
 window.onload = () => {
   function getFolders() {
     return new Promise(function(resolve) {
@@ -183,7 +184,7 @@ const printToPage = (folder) => {
   addUrlDescription.setAttribute('id', 'url-description-input')
   let addUrlButton = document.createElement('button')
   addUrlButton.setAttribute('id', 'add-url-btn')
-  addUrlButton.innerHTML = 'Sumbit url'
+  addUrlButton.innerHTML = 'Submit url'
   newUrlField.append(addUrlInput, addUrlDescription, addUrlButton)
   urlList.append(newUrlField)
   urlList.append(dropNav)
@@ -191,45 +192,66 @@ const printToPage = (folder) => {
 
   let submitNewUrl = () => {
 
-    fetch('/api/v1/folders')
-    .then(response => response.json())
-    .then(res => {
-      let match =  res.find(returnedFolder => returnedFolder.name === folder.name )
-      return match
-    })
-    .then(match => {
-      fetch('/api/v1/urls', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          'url': addUrlInput.value,
-          'description': addUrlDescription.value,
-          'folder_id': match.id
-        })
+    addUrlInput.value = addUrlInput.value.includes("http://") ? addUrlInput.value :  addUrlInput.value.includes("www") ? "http://" + addUrlInput.value : "http://" + "www." + addUrlInput.value;
+
+    let regexTest = () => {
+      let regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+
+      console.log(addUrlInput.value);
+      return regex.test(addUrlInput.value)
+    }
+
+    let topLevelDomainCheck = () => {
+      if(addUrlInput.value.includes('.com') || addUrlInput.value.includes('.org') || addUrlInput.value.includes('.edu') || addUrlInput.value.includes('.gov') || addUrlInput.value.includes('.io') || addUrlInput.value.includes('.net')) {
+        return true
+      } else {
+        return false
+      }
+    }
+
+    if(regexTest() && topLevelDomainCheck()) {
+
+      fetch('/api/v1/folders')
+      .then(response => response.json())
+      .then(res => {
+        let match =  res.find(returnedFolder => returnedFolder.name === folder.name )
+        return match
       })
-      .then(res => res.json())
-      .then(data => {
-        let incrementPopularity = () => {
-          fetch(`/api/v1/urls/${data[0]}`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+      .then(match => {
+        fetch('/api/v1/urls', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            'url': addUrlInput.value,
+            'description': addUrlDescription.value,
+            'folder_id': match.id
           })
-        }
-        let urlDiv = document.createElement('div')
-        let newLink = document.createElement('li')
-        let aTag = document.createElement('a')
-        aTag.innerHTML += `${root}${data[0]}`
-        aTag.setAttribute('href', `${root}${data[0]}`)
-        aTag.setAttribute('target', 'blank')
-        aTag.addEventListener('click', incrementPopularity)
-        newLink.append(aTag)
-        urlList.append(newLink)
+        })
+        .then(res => res.json())
+        .then(data => {
+          let incrementPopularity = () => {
+            fetch(`/api/v1/urls/${data[0]}`, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+            })
+          }
+          let urlDiv = document.createElement('div')
+          let newLink = document.createElement('li')
+          let aTag = document.createElement('a')
+          aTag.innerHTML += `${root}${data[0]}`
+          aTag.setAttribute('href', `${root}${data[0]}`)
+          aTag.setAttribute('target', 'blank')
+          aTag.addEventListener('click', incrementPopularity)
+          newLink.append(aTag)
+          urlList.append(newLink)
 
-        addUrlInput.value = ''
-        addUrlDescription.value = ''
+        })
+
       })
+    }
+    addUrlInput.value = ''
+    addUrlDescription.value = ''
 
-    })
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
@@ -269,14 +291,22 @@ const submitFolder = () => {
   let newUrl = document.getElementById('new-url').value
   let newUrlDescription = document.getElementById('new-url-description').value
   newUrl = newUrl.includes("http://") ? newUrl :  newUrl.includes("www") ? "http://" + newUrl : "http://" + "www." + newUrl;
-  console.log(newUrl);
+
   let regexTest = () => {
     let regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
     return regex.test(newUrl)
   }
 
+  let topLevelDomainCheck = () => {
+    if(newUrl.includes('.com') || newUrl.includes('.org') || newUrl.includes('.edu') || newUrl.includes('.gov') || newUrl.includes('.io') || newUrl.includes('.net')) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   let urlData = [{url: newUrl, description: newUrlDescription}]
-  if (regexTest()) {
+  //if (regexTest() && topLevelDomainCheck()) {
     fetch('/api/v1/folders', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -288,7 +318,7 @@ const submitFolder = () => {
     .then(res => res.json())
     .then(data => {
       const {name, urls, id} = data
-      if (urls) {
+      if (urls && regexTest() && topLevelDomainCheck()) {
         let folderInfo = {name: name, urls: urls}
         printToPage(folderInfo)
       } else {
@@ -297,7 +327,6 @@ const submitFolder = () => {
       }
     })
     .catch(error => console.log(error))
-  }
 
   document.getElementById('new-folder-name').value = ''
   document.getElementById('new-url').value = ''
