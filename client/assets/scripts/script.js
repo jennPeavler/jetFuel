@@ -6,7 +6,6 @@ if(host.includes('local')) {
 } else {
   shortRoot = root.substring(8)
 }
-// let shortRoot = root.substring(7)
 let popularityOrder = true;
 let dateOrder = true;
 
@@ -327,26 +326,20 @@ let clear = () => {
 
 let searchFolder = () => {
   let search = document.getElementById('search-bar').value
+  search = search.toLowerCase()
+  console.log(search);
   let folderNames = document.getElementsByClassName('folder-names')
-  console.log(folderNames);
   for(let i = 0; i < folderNames.length; i++) {
-    if (search === folderNames[i].innerHTML) {
-      console.log('hit');
+    let lowerCaseFolderName = folderNames[i].innerHTML.toLowerCase()
+    if (search === lowerCaseFolderName) {
+      folderNames[i].style.display = 'block'
+    } else if (search === '') {
+      folderNames[i].style.display = 'block'
+    } else {
+      folderNames[i].style.display = 'none'
     }
   }
 }
 
-// $('#search').on('keyup', function() {
-//     var searchInput = $(this).val().toLowerCase();
-//     $('.title-line').each(function() {
-//       var searchText = $(this).text().toLowerCase();
-//       if (!!searchText.match(searchInput)) {
-//         $(this).closest('.idea-card').toggle(true);
-//       }else {
-//         $(this).closest('.idea-card').toggle(false);
-//       }
-//     });
-// });
-
 document.getElementById('folder-submit-btn').addEventListener('click', submitFolder)
-document.getElementById('search-bar').addEventListener('keyup', searchFolder)
+document.getElementById('search-bar').addEventListener('input', searchFolder)
