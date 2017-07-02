@@ -4,6 +4,7 @@ let root = host
 let popularityOrder = true;
 let dateOrder = true;
 
+
 window.onload = () => {
   function getFolders() {
     return new Promise(function(resolve) {
