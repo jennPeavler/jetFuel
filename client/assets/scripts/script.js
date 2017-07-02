@@ -97,6 +97,8 @@ const printToPage = (folder) => {
   folderTitle.classList.add('folder-names')
   folderTitle.innerHTML += `${folder.name}`
   newFolder.append(folderTitle)
+  newFolder.classList.add("folder-not-clicked")
+
 
   const popularitySort = () => {
     popularityOrder = !popularityOrder
@@ -237,8 +239,12 @@ const printToPage = (folder) => {
   let clickFolder = () => {
     if(urlList.style.display === 'none') {
       urlList.style.display = 'block'
+      newFolder.classList.remove("folder-not-clicked")
+      newFolder.classList.add("folder-clicked")
     } else {
       urlList.style.display = 'none'
+      newFolder.classList.remove("folder-clicked")
+      newFolder.classList.add("folder-not-clicked")
     }
   }
   folderTitle.addEventListener('click', clickFolder)
@@ -320,6 +326,7 @@ let newFolderNameOnlyPostRequest = (newFolderName) => {
 
 let clear = () => {
   document.getElementById('new-folder-name').value = ''
+  document.getElementById('folder-submit-btn').setAttribute('disabled', "")
   document.getElementById('new-url').value = ''
   document.getElementById('new-url-description').value = ''
 }
@@ -329,17 +336,31 @@ let searchFolder = () => {
   search = search.toLowerCase()
   console.log(search);
   let folderNames = document.getElementsByClassName('folder-names')
-  for(let i = 0; i < folderNames.length; i++) {
+  let folders = document.getElementsByClassName('folders')
+  for(let i = 0; i < folders.length; i++) {
     let lowerCaseFolderName = folderNames[i].innerHTML.toLowerCase()
     if (search === lowerCaseFolderName) {
-      folderNames[i].style.display = 'block'
+      folders[i].style.display = 'block'
     } else if (search === '') {
-      folderNames[i].style.display = 'block'
+      folders[i].style.display = 'block'
     } else {
-      folderNames[i].style.display = 'none'
+      folders[i].style.display = 'none'
     }
   }
 }
 
+let disableFolderSubmit = () => {
+  let folderName = document.getElementById('new-folder-name').value
+  let submitButton = document.getElementById('folder-submit-btn')
+
+  if(folderName === '') {
+    submitButton.setAttribute('disabled', "")
+  } else {
+    submitButton.disabled = false
+  }
+}
+
+
 document.getElementById('folder-submit-btn').addEventListener('click', submitFolder)
+document.getElementById('new-folder-name').addEventListener('input', disableFolderSubmit)
 document.getElementById('search-bar').addEventListener('input', searchFolder)

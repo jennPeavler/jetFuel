@@ -187,6 +187,18 @@ a:hover {
   color: #3A8273;
 }
 
+.folder-clicked {
+  /*font-size: 40px;*/
+}
+
+.folder-not-clicked {
+  border: 1px solid #3A8273;
+  width: 250px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  height: 60px;
+}
+
 
 @media (max-width: 640px) {
   .folders {
