@@ -17,8 +17,9 @@ app.use('/api/v1', router)
 
 app.get('/:id', api.reRouteLink)
 
-app.listen(port, function () {
-  console.log('Jetfuel server listening on port' + `${port}!`)
+app.listen(port, () => {
+  process.stdout.write('\033c')
+  console.log('Jetfuel server listening on port ' + `${port}!`)
 })
 
 module.exports = app
