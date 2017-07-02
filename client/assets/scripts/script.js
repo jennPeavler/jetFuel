@@ -104,7 +104,6 @@ const printToPage = (folder) => {
   }
 
   const dateSort = () => {
-    console.log(dateOrder)
     dateOrder = !dateOrder
     fetch('/api/v1/folders')
     .then(response => response.json())
@@ -128,10 +127,6 @@ const printToPage = (folder) => {
         recursiveRemove(liArray)
 
         let urlsInOrder = urls.sort((a,b) => {
-          console.log('url', a.created_at);
-          console.log(typeof(a.created_at))
-          console.log(Date.parse(a.created_at))
-          console.log('url', b.created_at);
           if(dateOrder) {
             return Date.parse(a.created_at) - Date.parse(b.created_at)
           } else {
@@ -273,29 +268,36 @@ const submitFolder = () => {
   let newFolderName = document.getElementById('new-folder-name').value
   let newUrl = document.getElementById('new-url').value
   let newUrlDescription = document.getElementById('new-url-description').value
+  newUrl = newUrl.includes("http://") ? newUrl :  newUrl.includes("www") ? "http://" + newUrl : "http://" + "www." + newUrl;
+  console.log(newUrl);
+  let regexTest = () => {
+    let regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+    return regex.test(newUrl)
+  }
 
   let urlData = [{url: newUrl, description: newUrlDescription}]
-
-  fetch('/api/v1/folders', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      'name': newFolderName,
-      'urls': urlData
+  if (regexTest()) {
+    fetch('/api/v1/folders', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        'name': newFolderName,
+        'urls': urlData
+      })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    const {name, urls, id} = data
-    if (urls) {
-      let folderInfo = {name: name, urls: urls}
-      printToPage(folderInfo)
-    } else {
-      let folderInfo = {name: name}
-      printToPage(folderInfo)
-    }
-  })
-  .catch(error => console.log(error))
+    .then(res => res.json())
+    .then(data => {
+      const {name, urls, id} = data
+      if (urls) {
+        let folderInfo = {name: name, urls: urls}
+        printToPage(folderInfo)
+      } else {
+        let folderInfo = {name: name}
+        printToPage(folderInfo)
+      }
+    })
+    .catch(error => console.log(error))
+  }
 
   document.getElementById('new-folder-name').value = ''
   document.getElementById('new-url').value = ''

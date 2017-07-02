@@ -67,7 +67,8 @@ const reRouteLink = (req, res) => {
   database('urls').where('id', id).select('url')
   .then(longUrl => {
     const { url } = longUrl[0]
-    res.redirect(302, `http://${url}`)
+    console.log(url);
+    res.redirect(302, `${url}`)
   })
 }
 
