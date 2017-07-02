@@ -44,8 +44,13 @@ const errorMessage = (error) => {
     alert('You Submitted a Bad URL')
   } else {
     let form = document.getElementById('folder-input-popup')
-    let message = "Your Folder was created but without urls. Damnit Brittany."
-    form.append(message)
+    messageElement = document.createElement('p')
+    let message = "Folder created but url was invalid and not inserted into folder."
+    messageElement.innerHTML += message
+    form.append(messageElement)
+    setTimeout(() => {
+      messageElement.remove()
+    }, 4000)
   }
 }
 
@@ -254,16 +259,20 @@ const printToPage = (folder) => {
           aTag.addEventListener('click', incrementPopularity)
           newLink.append(aTag)
           urlList.append(newLink)
+          addUrlInput.value = ''
+          addUrlDescription.value = ''
 
 
         })
 
       })
+
     } else {
       errorMessage('bad url')
+      addUrlInput.value = ''
+      addUrlDescription.value = ''
     }
-    addUrlInput.value = ''
-    addUrlDescription.value = ''
+
   }
 
   addUrlButton.addEventListener('click', submitNewUrl)
@@ -354,7 +363,8 @@ const submitFolder = () => {
       const {name, id} = data
       console.log(data)
         let folderInfo = {name: name}
-        printToPage(folderInfo) 
+        printToPage(folderInfo)
+        errorMessage()
     })
     .catch(error => console.log(error))
   }
