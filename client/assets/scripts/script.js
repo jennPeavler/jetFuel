@@ -63,6 +63,25 @@ let recursiveRemove = (arr) => {
   }
 }
 
+let generateLinks = (urlList, url) => {
+  let incrementPopularity = () => {
+    fetch(`/api/v1/urls/${url.id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+    })
+  }
+
+  let urlDiv = document.createElement('div')
+  let newLink = document.createElement('li')
+  let aTag = document.createElement('a')
+  aTag.innerHTML += `${root}${url.id}`
+  aTag.setAttribute('href', `${root}${url.id}`)
+  aTag.setAttribute('target', 'blank')
+  aTag.addEventListener('click', incrementPopularity)
+  newLink.append(aTag)
+  urlList.append(newLink)
+}
+
 const printToPage = (folder) => {
   const display = document.getElementById('folder-display')
   let newFolder = document.createElement('div')
@@ -97,22 +116,7 @@ const printToPage = (folder) => {
           }
         })
         urlsInOrder.forEach(url => {
-          let incrementPopularity = () => {
-            fetch(`/api/v1/urls/${url.id}`, {
-              method: 'PUT',
-              headers: {'Content-Type': 'application/json'},
-            })
-          }
-          // NOTE these appear three times, lets dry this up
-          let urlDiv = document.createElement('div')
-          let newLink = document.createElement('li')
-          let aTag = document.createElement('a')
-          aTag.innerHTML += `${root}${url.id}`
-          aTag.setAttribute('href', `${root}${url.id}`)
-          aTag.setAttribute('target', 'blank')
-          aTag.addEventListener('click', incrementPopularity)
-          newLink.append(aTag)
-          urlList.append(newLink)
+          generateLinks(urlList, url)
         })
       })
     })
@@ -143,25 +147,8 @@ const printToPage = (folder) => {
         })
 
         urlsInOrder.forEach(url => {
-
-          let incrementPopularity = () => {
-            fetch(`/api/v1/urls/${url.id}`, {
-              method: 'PUT',
-              headers: {'Content-Type': 'application/json'},
-            })
-          }
-          let urlDiv = document.createElement('div')
-          let newLink = document.createElement('li')
-          let aTag = document.createElement('a')
-          aTag.innerHTML += `${root}${url.id}`
-          aTag.setAttribute('href', `${root}${url.id}`)
-          aTag.setAttribute('target', 'blank')
-          aTag.addEventListener('click', incrementPopularity)
-          newLink.append(aTag)
-          urlList.append(newLink)
-
+          generateLinks(urlList, url)
         })
-
       })
     })
   }
@@ -219,21 +206,8 @@ const printToPage = (folder) => {
         })
         .then(res => res.json())
         .then(data => {
-          let incrementPopularity = () => {
-            fetch(`/api/v1/urls/${data[0]}`, {
-              method: 'PUT',
-              headers: {'Content-Type': 'application/json'},
-            })
-          }
-          let urlDiv = document.createElement('div')
-          let newLink = document.createElement('li')
-          let aTag = document.createElement('a')
-          aTag.innerHTML += `${root}${data[0]}`
-          aTag.setAttribute('href', `${root}${data[0]}`)
-          aTag.setAttribute('target', 'blank')
-          aTag.addEventListener('click', incrementPopularity)
-          newLink.append(aTag)
-          urlList.append(newLink)
+          console.log('i fired and here is my data',  data);
+          generateLinks(urlList, {id: data[0]})
           addUrlInput.value = ''
           addUrlDescription.value = ''
         })
@@ -248,20 +222,7 @@ const printToPage = (folder) => {
   addUrlButton.addEventListener('click', submitNewUrl)
   if(folder.urls) {
     folder.urls.forEach(url => {
-      let incrementPopularity = () => {
-        fetch(`/api/v1/urls/${url.id}`, {
-          method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
-        })
-      }
-      let newLink = document.createElement('li')
-      let aTag = document.createElement('a')
-      aTag.innerHTML += `${root}${url.id}`
-      aTag.setAttribute('href', `${root}${url.id}`)
-      aTag.setAttribute('target', 'blank')
-      aTag.addEventListener('click', incrementPopularity)
-      newLink.append(aTag)
-      urlList.append(newLink)
+      generateLinks(urlList, url)
     })
   }
   newFolder.append(urlList)
@@ -296,50 +257,60 @@ const submitFolder = () => {
   let newUrlDescription = document.getElementById('new-url-description').value
   newUrl = newUrl.includes("http://") ? newUrl :  newUrl.includes("www") ? "http://" + newUrl : "http://" + "www." + newUrl;
 
-
-
   let urlData = [{url: newUrl, description: newUrlDescription}]
+
   if (regexTest(newUrl) && topLevelDomainCheck(newUrl)) {
-    fetch('/api/v1/folders', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        'name': newFolderName,
-        'urls': urlData
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      const {name, urls, id} = data
-      console.log(data)
-      if (urls) {
-        let folderInfo = {name: name, urls: urls}
-        printToPage(folderInfo)
-      } else {
-        let folderInfo = {name: name}
-        printToPage(folderInfo)
-        errorMessage()
-      }
-    })
-    .catch(error => console.log(error))
+    newFolderPostRequest(newFolderName, urlData)
   } else {
-    fetch(`/api/v1/folders/${newFolderName}`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        'name': newFolderName,
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      const {name, id} = data
-      console.log(data)
-        let folderInfo = {name: name}
-        printToPage(folderInfo)
-        errorMessage()
-    })
-    .catch(error => console.log(error))
+    newFolderNameOnlyPostRequest(newFolderName)
   }
+}
+
+let newFolderPostRequest = (newFolderName, urlData) => {
+  fetch('/api/v1/folders', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      'name': newFolderName,
+      'urls': urlData
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const {name, urls, id} = data
+    if (urls) {
+      let folderInfo = {name: name, urls: urls}
+      printToPage(folderInfo)
+    } else {
+      let folderInfo = {name: name}
+      printToPage(folderInfo)
+      errorMessage()
+    }
+  })
+  .catch(error => console.log(error))
+}
+
+let newFolderNameOnlyPostRequest = (newFolderName) => {
+  fetch(`/api/v1/folders/${newFolderName}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      'name': newFolderName,
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const {name, id} = data
+      let folderInfo = {name: name}
+      printToPage(folderInfo)
+      errorMessage()
+  })
+  .catch(error => console.log(error))
+
+  clear()
+}
+
+let clear = () => {
   document.getElementById('new-folder-name').value = ''
   document.getElementById('new-url').value = ''
   document.getElementById('new-url-description').value = ''
