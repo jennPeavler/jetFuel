@@ -94,7 +94,8 @@ const addNewUrl = (req, res) => {
   const { url, description, folder_id } = req.body
   database('urls').insert(req.body, 'id')
   .then(data => {
-    res.status(201).send(data)
+    let response = Object.assign({}, req.body, {id: data[0]})
+    res.status(201).send(response)
   })
   .catch(error => {
     res.status(404).send({error: 'Can not add a url to a non-existing folder'})
