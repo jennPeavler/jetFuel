@@ -337,7 +337,7 @@ let searchFolder = () => {
   let folders = document.getElementsByClassName('folders')
   for(let i = 0; i < folders.length; i++) {
     let lowerCaseFolderName = folderNames[i].innerHTML.toLowerCase()
-    if (search === lowerCaseFolderName) {
+    if (search.match(lowerCaseFolderName)) {
       folders[i].style.display = 'block'
     } else if (search === '') {
       folders[i].style.display = 'block'
