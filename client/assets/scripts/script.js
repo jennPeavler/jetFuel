@@ -317,7 +317,6 @@ let newFolderNameOnlyPostRequest = (newFolderName) => {
     const {name, id} = data
       let folderInfo = {name: name}
       printToPage(folderInfo)
-      errorMessage()
   })
   .catch(error => console.log(error))
 
@@ -334,7 +333,6 @@ let clear = () => {
 let searchFolder = () => {
   let search = document.getElementById('search-bar').value
   search = search.toLowerCase()
-  console.log(search);
   let folderNames = document.getElementsByClassName('folder-names')
   let folders = document.getElementsByClassName('folders')
   for(let i = 0; i < folders.length; i++) {
