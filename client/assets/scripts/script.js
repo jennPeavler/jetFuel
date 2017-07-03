@@ -1,10 +1,10 @@
 let host = window.location.href
 let root = host
 let shortRoot = ''
-if(host.includes('local')) {
+if(root.includes('local')) {
   shortRoot = root.substring(7)
 } else {
-  shortRoot = root.substring(8)
+  shortRoot = root.substring(7)
 }
 let popularityOrder = true;
 let dateOrder = true;
