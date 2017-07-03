@@ -1,12 +1,11 @@
 let host = window.location.href
 let root = host
 let shortRoot = ''
-if(host.includes('local')) {
+if(root.includes('local')) {
   shortRoot = root.substring(7)
 } else {
-  shortRoot = root.substring(8)
+  shortRoot = root.substring(7)
 }
-// let shortRoot = root.substring(7)
 let popularityOrder = true;
 let dateOrder = true;
 
@@ -98,6 +97,8 @@ const printToPage = (folder) => {
   folderTitle.classList.add('folder-names')
   folderTitle.innerHTML += `${folder.name}`
   newFolder.append(folderTitle)
+  newFolder.classList.add("folder-not-clicked")
+
 
   const popularitySort = () => {
     popularityOrder = !popularityOrder
@@ -238,8 +239,12 @@ const printToPage = (folder) => {
   let clickFolder = () => {
     if(urlList.style.display === 'none') {
       urlList.style.display = 'block'
+      newFolder.classList.remove("folder-not-clicked")
+      newFolder.classList.add("folder-clicked")
     } else {
       urlList.style.display = 'none'
+      newFolder.classList.remove("folder-clicked")
+      newFolder.classList.add("folder-not-clicked")
     }
   }
   folderTitle.addEventListener('click', clickFolder)
@@ -312,7 +317,6 @@ let newFolderNameOnlyPostRequest = (newFolderName) => {
     const {name, id} = data
       let folderInfo = {name: name}
       printToPage(folderInfo)
-      errorMessage()
   })
   .catch(error => console.log(error))
 
@@ -321,32 +325,40 @@ let newFolderNameOnlyPostRequest = (newFolderName) => {
 
 let clear = () => {
   document.getElementById('new-folder-name').value = ''
+  document.getElementById('folder-submit-btn').setAttribute('disabled', "")
   document.getElementById('new-url').value = ''
   document.getElementById('new-url-description').value = ''
 }
 
 let searchFolder = () => {
   let search = document.getElementById('search-bar').value
+  search = search.toLowerCase()
   let folderNames = document.getElementsByClassName('folder-names')
-  console.log(folderNames);
-  for(let i = 0; i < folderNames.length; i++) {
-    if (search === folderNames[i].innerHTML) {
-      console.log('hit');
+  let folders = document.getElementsByClassName('folders')
+  for(let i = 0; i < folders.length; i++) {
+    let lowerCaseFolderName = folderNames[i].innerHTML.toLowerCase()
+    if (search === lowerCaseFolderName) {
+      folders[i].style.display = 'block'
+    } else if (search === '') {
+      folders[i].style.display = 'block'
+    } else {
+      folders[i].style.display = 'none'
     }
   }
 }
 
-// $('#search').on('keyup', function() {
-//     var searchInput = $(this).val().toLowerCase();
-//     $('.title-line').each(function() {
-//       var searchText = $(this).text().toLowerCase();
-//       if (!!searchText.match(searchInput)) {
-//         $(this).closest('.idea-card').toggle(true);
-//       }else {
-//         $(this).closest('.idea-card').toggle(false);
-//       }
-//     });
-// });
+let disableFolderSubmit = () => {
+  let folderName = document.getElementById('new-folder-name').value
+  let submitButton = document.getElementById('folder-submit-btn')
+
+  if(folderName === '') {
+    submitButton.setAttribute('disabled', "")
+  } else {
+    submitButton.disabled = false
+  }
+}
+
 
 document.getElementById('folder-submit-btn').addEventListener('click', submitFolder)
-document.getElementById('search-bar').addEventListener('keyup', searchFolder)
+document.getElementById('new-folder-name').addEventListener('input', disableFolderSubmit)
+document.getElementById('search-bar').addEventListener('input', searchFolder)

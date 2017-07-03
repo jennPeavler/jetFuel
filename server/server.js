@@ -19,6 +19,7 @@ app.get('/:id', api.reRouteLink)
 
 app.listen(port, () => {
   process.stdout.write('\033c')
+  console.log()
   console.log('Jetfuel server listening on port ' + `${port}!`)
 })
 
