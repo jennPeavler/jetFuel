@@ -8,7 +8,7 @@ const folders = (req, res) => {
     res.status(200).json(folders);
   })
   .catch(error => {
-    res.status(500)
+    res.status(500).send(error)
   });
 }
 
