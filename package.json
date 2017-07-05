@@ -24,7 +24,7 @@
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "mocha": "^3.4.2",
-    "validate-nlf": "file:///Users/sme/Documents/validate-nlf"
+    "validate-nlf": "https://github.com/jennPeavler/Validator-nlf"
   },
   "pre-commit": [
     "lint"
