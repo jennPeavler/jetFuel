@@ -19,6 +19,7 @@ let getFolders = () => {
   })
 }
 
+/* jshint ignore:start */
 let main = async () => {
   let folders = await getFolders()
 
@@ -39,11 +40,12 @@ let main = async () => {
 window.onload = () => {
   main()
 }
+/* jshint ignore:end */
 
 const errorHtml = () => {
   let form = document.getElementById('folder-input-popup')
-  messageElement = document.createElement('p')
-  let message = "Folder created but url was invalid and not inserted into folder."
+  let messageElement = document.createElement('p')
+  let message = 'Folder created but url was invalid and not inserted into folder.'
   messageElement.innerHTML += message
   form.append(messageElement)
   setTimeout(() => {
@@ -53,7 +55,9 @@ const errorHtml = () => {
 
 const errorMessage = (error) => {
   if (error == 'bad url') {
+    /* jshint ignore:start */
     alert('You Submitted a Bad URL')
+    /* jshint ignore:end */
   } else {
     errorHtml()
   }
@@ -97,7 +101,7 @@ const printToPage = (folder) => {
   folderTitle.classList.add('folder-names')
   folderTitle.innerHTML += `${folder.name}`
   newFolder.append(folderTitle)
-  newFolder.classList.add("folder-not-clicked")
+  newFolder.classList.add('folder-not-clicked')
 
 
   const popularitySort = () => {
@@ -112,7 +116,7 @@ const printToPage = (folder) => {
       fetch(`${root}api/v1/folders/${match.id}/urls`)
       .then(res => res.json())
       .then(urls => {
-        let liArray = newFolder.getElementsByTagName("li")
+        let liArray = newFolder.getElementsByTagName('li')
 
         recursiveRemove(liArray)
 
@@ -142,7 +146,7 @@ const printToPage = (folder) => {
       fetch(`${root}api/v1/folders/${match.id}/urls`)
       .then(res => res.json())
       .then(urls => {
-        let liArray = newFolder.getElementsByTagName("li")
+        let liArray = newFolder.getElementsByTagName('li')
 
         recursiveRemove(liArray)
 
@@ -194,7 +198,7 @@ const printToPage = (folder) => {
   urlList.style.display = 'none'
 
   let submitNewUrl = () => {
-    addUrlInput.value = addUrlInput.value.includes("http://") ? addUrlInput.value :  addUrlInput.value.includes("www") ? "http://" + addUrlInput.value : "http://" + "www." + addUrlInput.value;
+    addUrlInput.value = addUrlInput.value.includes('http://') ? addUrlInput.value :  addUrlInput.value.includes('www') ? 'http://' + addUrlInput.value : 'http://' + 'www.' + addUrlInput.value;
 
     if(regexTest(addUrlInput.value) && topLevelDomainCheck(addUrlInput.value)) {
       fetch('/api/v1/folders')
@@ -239,12 +243,12 @@ const printToPage = (folder) => {
   let clickFolder = () => {
     if(urlList.style.display === 'none') {
       urlList.style.display = 'block'
-      newFolder.classList.remove("folder-not-clicked")
-      newFolder.classList.add("folder-clicked")
+      newFolder.classList.remove('folder-not-clicked')
+      newFolder.classList.add('folder-clicked')
     } else {
       urlList.style.display = 'none'
-      newFolder.classList.remove("folder-clicked")
-      newFolder.classList.add("folder-not-clicked")
+      newFolder.classList.remove('folder-clicked')
+      newFolder.classList.add('folder-not-clicked')
     }
   }
   folderTitle.addEventListener('click', clickFolder)
@@ -268,7 +272,7 @@ const submitFolder = () => {
   let newFolderName = document.getElementById('new-folder-name').value
   let newUrl = document.getElementById('new-url').value
   let newUrlDescription = document.getElementById('new-url-description').value
-  newUrl = newUrl.includes("http://") ? newUrl :  newUrl.includes("www") ? "http://" + newUrl : "http://" + "www." + newUrl;
+  newUrl = newUrl.includes('http://') ? newUrl :  newUrl.includes('www') ? 'http://' + newUrl : 'http://' + 'www.' + newUrl;
 
   let urlData = [{url: newUrl, description: newUrlDescription}]
 
@@ -325,7 +329,7 @@ let newFolderNameOnlyPostRequest = (newFolderName) => {
 
 let clear = () => {
   document.getElementById('new-folder-name').value = ''
-  document.getElementById('folder-submit-btn').setAttribute('disabled', "")
+  document.getElementById('folder-submit-btn').setAttribute('disabled', '')
   document.getElementById('new-url').value = ''
   document.getElementById('new-url-description').value = ''
 }
@@ -352,7 +356,7 @@ let disableFolderSubmit = () => {
   let submitButton = document.getElementById('folder-submit-btn')
 
   if(folderName === '') {
-    submitButton.setAttribute('disabled', "")
+    submitButton.setAttribute('disabled', '')
   } else {
     submitButton.disabled = false
   }

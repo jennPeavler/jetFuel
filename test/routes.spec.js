@@ -16,7 +16,9 @@ describe('Client Routes', () => {
     .get('/')
     .end((err, response) => {
       // response.should.have.status(200);
+      /* jshint ignore:start */
       response.should.be.html;
+      /* jshint ignore:end */
       done();
     });
   });
@@ -43,7 +45,9 @@ describe('API Routes', () => {
       .get('/api/v1/folders')
       .end((err, response) => {
         response.should.have.status(200)
+        /* jshint ignore:start */
         response.should.be.json
+        /* jshint ignore:end */
         response.body.length.should.equal(2)
         response.body[0].should.have.property('name')
         response.body[0].name.should.equal('chicago')
