@@ -13,3 +13,8 @@ deployment:
   branch: master
   heroku:
     appname: shrtee
+
+  staging:
+  branch: stagine
+  heroku:
+    appname: shrtee-staging
