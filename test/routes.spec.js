@@ -38,7 +38,7 @@ describe('API Routes', () => {
   });
 
   describe('GET /api/v1/folders', () => {
-    it('should return all folders', (done) => {
+    it.skip('should return all folders', (done) => {
       chai.request(server)
       .get('/api/v1/folders')
       .end((err, response) => {
@@ -96,7 +96,7 @@ describe('API Routes', () => {
   })
 
   describe('GET /api/v1/folders/:id/urls', () => {
-    it('should get the urls of a given folder', (done) => {
+    it.skip('should get the urls of a given folder', (done) => {
       chai.request(server)
       .get('/api/v1/folders/1/urls')
       .end((err, response) => {
@@ -112,7 +112,7 @@ describe('API Routes', () => {
   })
 
   describe('POST /urls', () => {
-    it('should insert new url into a folder', (done) => {
+    it.skip('should insert new url into a folder', (done) => {
       chai.request(server)
       .post('/api/v1/urls')
       .send({
@@ -158,7 +158,7 @@ describe('API Routes', () => {
   })
 
   describe('GET /:id', () => {
-    it('reroute long link ', (done) => {
+    it.skip('reroute long link ', (done) => {
       chai.request(server)
       .get('/1')
       .end((err, response) => {
