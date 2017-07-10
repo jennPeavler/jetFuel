@@ -3,7 +3,7 @@
   "name": "Shrtee - Url Shortener",
   "icons": [
     {
-      "src": "./client/assets/logo-icon.png",
+      "src": "./assets/logo-icon.png",
       "type": "image/png",
       "sizes": "48x48"
     }
