@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/routes.spec.js",
-    "start": "nodemon server/server.js"
+    "start": "nodemon server/server.js",
+    "lint": "jshint ."
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,8 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "git-validate": "^2.2.2",
+    "jshint": "^2.9.5",
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
     "pg": "^6.4.0"
@@ -20,6 +23,10 @@
   "devDependencies": {
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
-    "mocha": "^3.4.2"
-  }
+    "mocha": "^3.4.2",
+    "validate-nlf": "https://github.com/jennPeavler/Validator-nlf"
+  },
+  "pre-commit": [
+    "lint"
+  ]
 }

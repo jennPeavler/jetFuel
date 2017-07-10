@@ -1,0 +1,14 @@
+{
+  "node": true,
+
+  "curly": true,
+  "latedef": false,
+  "quotmark": true,
+  "undef": true,
+  "unused": false,
+  "trailing": true,
+  "asi": true,
+  "esversion": 6,
+  "mocha": true,
+  "browser": true
+}
